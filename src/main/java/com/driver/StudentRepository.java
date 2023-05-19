@@ -74,14 +74,23 @@ public class StudentRepository
 
     public void deleteTeacherByName(String teacher)
     {
-        if(teacherAndItsDB.containsKey(teacher)) teacherAndItsDB.remove(teacher);
         if(teacherDB.containsKey(teacher)) teacherDB.remove(teacher);
+        if(teacherAndItsDB.containsKey(teacher))
+        {
+            List<String> list = teacherAndItsDB.get(teacher);
+            for(String studentname : list)
+            {
+                studentDB.remove(studentname);
+            }
+            teacherAndItsDB.remove(teacher);
+        }
     }
 
     public void deleteAllTeachers()
     {
-        teacherDB.clear();
-        studentDB.clear();
-        teacherAndItsDB.clear();
+        for(String teacherName : teacherDB.keySet())
+        {
+            deleteTeacherByName(teacherName);
+        }
     }
 }
